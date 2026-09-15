@@ -747,6 +747,28 @@ html, body {
 .drawer-footer {
   padding: 18px 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-share-link {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255, 152, 0, 0.18);
+  border: 1px solid rgba(255, 152, 0, 0.45);
+  color: #ffb74d;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-share-link:hover {
+  background: rgba(255, 152, 0, 0.32);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .btn-secondary {

@@ -4,9 +4,19 @@
  */
 
 // ==========================================================================
-// Curated Default OG Ganesh Playlist
+// PUBLIC PLAYLIST CONFIGURATION
+// Anyone visiting your public website will listen to these tracks.
+// Option 1: Set a YouTube Playlist ID below (e.g. 'PLxxxxxxxxxxxxxxx')
+// Option 2: Add your favourite song video IDs into DEFAULT_PLAYLIST below
 // ==========================================================================
 
+export const PUBLIC_CONFIG = {
+  // If you have a public YouTube Playlist, paste its ID here (e.g. 'PLTJ1PnzCWyFw...')
+  // Leave empty '' to use the curated OG tracklist below.
+  youtubePlaylistId: '',
+};
+
+// Curated Default OG Ganesh Playlist
 const DEFAULT_PLAYLIST = [
   {
     id: 'KYUURuT4W5Y',
@@ -72,6 +82,7 @@ const DEFAULT_PLAYLIST = [
 
 class MusicAppState {
   constructor() {
+    this.activePlaylistId = null;
     this.playlist = this.loadStoredPlaylist();
     this.currentIndex = 0;
     this.isPlaying = false;
@@ -85,6 +96,31 @@ class MusicAppState {
   }
 
   loadStoredPlaylist() {
+    // 1. Check URL parameters for shared public playlist or songs
+    const urlParams = new URLSearchParams(window.location.search);
+    const sharedList = urlParams.get('list') || urlParams.get('playlist') || PUBLIC_CONFIG.youtubePlaylistId;
+    if (sharedList) {
+      this.activePlaylistId = sharedList;
+    }
+
+    const sharedSongs = urlParams.get('songs');
+    if (sharedSongs) {
+      const ids = sharedSongs.split(',').map(s => s.trim()).filter(Boolean);
+      if (ids.length > 0) {
+        return ids.map((id, index) => {
+          const known = DEFAULT_PLAYLIST.find(d => d.id === id);
+          return known || {
+            id,
+            title: `Ganesh Track ${index + 1}`,
+            artist: 'Devotional Song',
+            duration: '4:00',
+            thumb: `https://img.youtube.com/vi/${id}/mqdefault.jpg`
+          };
+        });
+      }
+    }
+
+    // 2. Check localStorage
     try {
       const stored = localStorage.getItem('ganesh_chaturthi_playlist');
       if (stored) {
@@ -96,6 +132,8 @@ class MusicAppState {
     } catch (e) {
       console.warn('Could not load playlist from localStorage', e);
     }
+
+    // 3. Fallback to curated default
     return [...DEFAULT_PLAYLIST];
   }
 
@@ -802,6 +840,26 @@ function setupEventListeners() {
       showToast('Reset to default OG Playlist');
     }
   });
+
+  // Share Public Playlist Link
+  const sharePlaylistBtn = document.getElementById('sharePlaylistBtn');
+  if (sharePlaylistBtn) {
+    sharePlaylistBtn.addEventListener('click', () => {
+      const shareUrl = new URL(window.location.href);
+      if (state.activePlaylistId) {
+        shareUrl.searchParams.set('list', state.activePlaylistId);
+        shareUrl.searchParams.delete('songs');
+      } else {
+        shareUrl.searchParams.set('songs', state.playlist.map(s => s.id).join(','));
+        shareUrl.searchParams.delete('list');
+      }
+      navigator.clipboard.writeText(shareUrl.toString()).then(() => {
+        showToast('Copied public playlist link to clipboard!');
+      }).catch(() => {
+        prompt('Copy this public playlist link:', shareUrl.toString());
+      });
+    });
+  }
 
   // Add Modal
   openAddModalBtn.addEventListener('click', openModal);
