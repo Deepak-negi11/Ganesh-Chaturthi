@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ganesh Chaturthi Vibes — OG Ganeshotsav Songs</title>
+  <meta name="description" content="Immersive Ganesh Chaturthi music player featuring iconic OG devotional songs, YouTube playlist support, and celebratory visuals." />
+  
+  <!-- OpenGraph / Social Meta -->
+  <meta property="og:title" content="Ganesh Chaturthi Vibes — OG Ganeshotsav Songs" />
+  <meta property="og:description" content="Listen to the greatest Ganesh Chaturthi tracks with high-vibe festive celebration visuals." />
+  <meta property="og:image" content="/assets/ganesh_chaturthi_bg.jpg" />
+  <meta property="og:type" content="website" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <!-- Fullscreen Festival Background -->
+  <div class="hero-bg" id="heroBg">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <!-- Subtle Festive Floating Petals & Gulal Canvas -->
+  <canvas id="festiveCanvas" class="festive-canvas"></canvas>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <!-- Left: Local Live Clock -->
+    <div class="nav-clock" id="liveClock" title="Current Local Time">
+      00:00:00
+    </div>
+
+    <!-- Right: Action Buttons -->
+    <div class="nav-actions">
+      <button class="pill-btn" id="openAddModalBtn" title="Add YouTube Video or Playlist">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Add YouTube Song</span>
+      </button>
+
+      <button class="pill-btn" id="openPlaylistBtn" title="View Tracklist & Queue">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+        <span>Playlist</span>
+        <span class="badge" id="queueBadge">8</span>
+      </button>
+
+      <button class="icon-btn" id="toggleParticlesBtn" title="Toggle Festive Petals / Gulal">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.6-6.2 4.6 2.4-7.4-6.2-4.5h7.6z"/>
+        </svg>
+      </button>
+
+      <button class="icon-btn" id="toggleFullscreenBtn" title="Toggle Fullscreen">
+        <svg id="fullscreenIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Showcase / Hero Title -->
+  <main class="hero-container">
+    <div class="hero-branding">
+      <h1 class="hero-title" id="heroTitle">
+        गणपती बाप्पा मोरया
+      </h1>
+    </div>
+  </main>
+
+  <!-- Bottom Floating Glassmorphic Music Player -->
+  <div class="player-wrapper">
+    <div class="player-pill" id="playerPill">
+      <!-- Rotating Vinyl / Album Artwork -->
+      <div class="vinyl-container" id="vinylContainer" title="Click to view song on YouTube">
+        <div class="vinyl-disc" id="vinylDisc">
+          <img id="trackArtwork" src="https://img.youtube.com/vi/KYUURuT4W5Y/mqdefault.jpg" alt="Song Artwork" class="vinyl-art" />
+          <div class="vinyl-center"></div>
+        </div>
+      </div>
+
+      <!-- Track Information & Scrubbable Seekbar -->
+      <div class="track-details">
+        <div class="track-meta">
+          <div class="track-title-container">
+            <span class="track-title" id="trackTitle">Deva Shree Ganesha</span>
+          </div>
+          <span class="track-artist" id="trackArtist">Ajay Gogavale • Agneepath</span>
+        </div>
+
+        <!-- Seek Slider -->
+        <div class="seek-container">
+          <div class="seek-bar" id="seekBar" role="slider" aria-label="Seek track" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="seek-progress" id="seekProgress" style="width: 0%;"></div>
+            <div class="seek-handle" id="seekHandle" style="left: 0%;"></div>
+          </div>
+          <div class="time-display">
+            <span id="currentTime">0:00</span>
+            <span>/</span>
+            <span id="totalDuration">0:00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="player-controls">
+        <!-- Shuffle Button -->
+        <button type="button" class="ctrl-btn sub-ctrl" id="shuffleBtn" title="Shuffle tracks">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 3 21 3 21 8"></polyline>
+            <line x1="4" y1="20" x2="21" y2="3"></line>
+            <polyline points="21 16 21 21 16 21"></polyline>
+            <line x1="15" y1="15" x2="21" y2="21"></line>
+            <line x1="4" y1="4" x2="9" y2="9"></line>
+          </svg>
+        </button>
+
+        <!-- Previous Button -->
+        <button type="button" class="ctrl-btn" id="prevBtn" title="Previous track">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+          </svg>
+        </button>
+
+        <!-- Play / Pause Main Button -->
+        <button type="button" class="play-btn" id="playBtn" title="Play / Pause">
+          <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg id="pauseIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+          </svg>
+        </button>
+
+        <!-- Next Button -->
+        <button type="button" class="ctrl-btn" id="nextBtn" title="Next track">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M16 6h2v12h-2zm-2 6L5.5 6v12z"/>
+          </svg>
+        </button>
+
+        <!-- Volume Wrapper -->
+        <div class="volume-container">
+          <button type="button" class="ctrl-btn sub-ctrl" id="muteBtn" title="Mute / Unmute">
+            <svg id="volHighIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <svg id="volMuteIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+              <line x1="1" y1="1" x2="23" y2="23"></line>
+              <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path>
+              <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"></path>
+            </svg>
+          </button>
+          <div class="volume-slider-wrapper">
+            <input type="range" id="volumeSlider" min="0" max="100" value="85" class="volume-slider" title="Volume" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide-out Playlist / Queue Drawer -->
+  <aside class="playlist-drawer" id="playlistDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title-wrap">
+        <h2>Ganeshotsav Playlist</h2>
+        <span class="drawer-count" id="drawerSongCount">8 tracks</span>
+      </div>
+      <div class="drawer-header-actions">
+        <button class="drawer-action-btn" id="drawerAddBtn" title="Add song from YouTube">
+          + Add
+        </button>
+        <button class="drawer-close-btn" id="closePlaylistBtn" title="Close Drawer">✕</button>
+      </div>
+    </div>
+
+    <!-- Track List -->
+    <div class="drawer-body">
+      <ul class="playlist-items" id="playlistList">
+        <!-- Dynamically injected via JavaScript -->
+      </ul>
+    </div>
+
+    <div class="drawer-footer">
+      <button class="btn-secondary" id="resetPlaylistBtn" title="Reset to original 8 OG Ganesh tracks">
+        Reset to Default OG Playlist
+      </button>
+    </div>
+  </aside>
+
+  <!-- Add YouTube Song / Playlist Modal -->
+  <div class="modal-backdrop" id="addModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h3>Add from YouTube</h3>
+          <p>Paste any YouTube video or playlist link to play on the site</p>
+        </div>
+        <button class="modal-close-btn" id="closeAddModalBtn">✕</button>
+      </div>
+
+      <form id="addSongForm" class="modal-form">
+        <div class="form-group">
+          <label for="ytUrlInput">YouTube Link or Video ID</label>
+          <input 
+            type="text" 
+            id="ytUrlInput" 
+            placeholder="e.g. https://www.youtube.com/watch?v=... or https://youtu.be/..." 
+            required 
+            autocomplete="off"
+          />
+          <span class="input-hint">Supports single videos (watch?v=...), Shorts, or Playlists (list=...)</span>
+        </div>
+
+        <div class="form-group">
+          <label for="customTitleInput">Song Title (Optional)</label>
+          <input 
+            type="text" 
+            id="customTitleInput" 
+            placeholder="Auto-detected or enter title" 
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="customArtistInput">Artist / Film Name (Optional)</label>
+          <input 
+            type="text" 
+            id="customArtistInput" 
+            placeholder="e.g. Shankar Mahadevan, Devotional, etc." 
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Quick Suggestions -->
+        <div class="quick-chips">
+          <span class="quick-label">Or quickly add:</span>
+          <button type="button" class="chip-btn" data-url="https://www.youtube.com/watch?v=nZ46Q5X1e8M" data-title="Mourya Re (Live Remix)" data-artist="Excel Movies">Mourya Re (Remix)</button>
+          <button type="button" class="chip-btn" data-url="https://www.youtube.com/watch?v=re88S-5fpmA" data-title="Shree Ganeshay Dheemahi" data-artist="Times Music">Dheemahi Special</button>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="cancelAddBtn">Cancel</button>
+          <button type="submit" class="btn-primary" id="submitAddBtn">
+            <span>Add to Playlist</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Hidden YouTube IFrame API Player -->
+  <div id="yt-player-wrapper" style="position: absolute; width: 1px; height: 1px; left: -9999px; top: -9999px; opacity: 0; pointer-events: none;">
+    <div id="ytPlayer"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/app.js"></script>
+</body>
+</html>
