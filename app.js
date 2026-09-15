@@ -96,11 +96,12 @@ class MusicAppState {
   }
 
   loadStoredPlaylist() {
-    // 1. Check URL parameters for shared public playlist or songs
+    // 1. Check URL parameters or PUBLIC_CONFIG for shared public playlist
     const urlParams = new URLSearchParams(window.location.search);
-    const sharedList = urlParams.get('list') || urlParams.get('playlist') || PUBLIC_CONFIG.youtubePlaylistId;
-    if (sharedList) {
-      this.activePlaylistId = sharedList;
+    const rawList = urlParams.get('list') || urlParams.get('playlist') || PUBLIC_CONFIG.youtubePlaylistId;
+    if (rawList) {
+      const listMatch = rawList.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+      this.activePlaylistId = listMatch ? listMatch[1] : rawList.trim();
     }
 
     const sharedSongs = urlParams.get('songs');
