@@ -11,13 +11,19 @@
 // ==========================================================================
 
 export const PUBLIC_CONFIG = {
-  // If you have a public YouTube Playlist, paste its ID here (e.g. 'PLTJ1PnzCWyFw...')
-  // Leave empty '' to use the curated OG tracklist below.
-  youtubePlaylistId: '',
+  // Public YouTube Playlist ID
+  youtubePlaylistId: 'PLc_Zd5XTpbGE',
 };
 
 // Curated Default OG Ganesh Playlist
 const DEFAULT_PLAYLIST = [
+  {
+    id: 'EPLTBjs3C4s',
+    title: 'De Taali (Hath Utha Ke)',
+    artist: 'Sukhwinder Singh • Bal Ganesh 2',
+    duration: '4:12',
+    thumb: 'https://img.youtube.com/vi/EPLTBjs3C4s/mqdefault.jpg'
+  },
   {
     id: 'KYUURuT4W5Y',
     title: 'Deva Shree Ganesha',
