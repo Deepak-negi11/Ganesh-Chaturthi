@@ -192,13 +192,13 @@ const volumeSlider = document.getElementById('volumeSlider');
 
 // Drawer & Modal Elements
 const playlistDrawer = document.getElementById('playlistDrawer');
-const openPlaylistBtn = document.getElementById('openPlaylistBtn');
+const openPlaylistBtn = document.getElementById('openPlaylistBtn'); // may be null
 const closePlaylistBtn = document.getElementById('closePlaylistBtn');
 const playlistList = document.getElementById('playlistList');
 const resetPlaylistBtn = document.getElementById('resetPlaylistBtn');
 
 const addModal = document.getElementById('addModal');
-const openAddModalBtn = document.getElementById('openAddModalBtn');
+const openAddModalBtn = document.getElementById('openAddModalBtn'); // may be null
 const drawerAddBtn = document.getElementById('drawerAddBtn');
 const closeAddModalBtn = document.getElementById('closeAddModalBtn');
 const cancelAddBtn = document.getElementById('cancelAddBtn');
@@ -207,7 +207,7 @@ const ytUrlInput = document.getElementById('ytUrlInput');
 const customTitleInput = document.getElementById('customTitleInput');
 const customArtistInput = document.getElementById('customArtistInput');
 
-const toggleParticlesBtn = document.getElementById('toggleParticlesBtn');
+const toggleParticlesBtn = document.getElementById('toggleParticlesBtn'); // may be null
 const toggleFullscreenBtn = document.getElementById('toggleFullscreenBtn');
 const toastEl = document.getElementById('toast');
 
@@ -233,7 +233,7 @@ function updateClock() {
   const ampm = hours >= 12 ? 'PM' : 'AM';
   hours = hours % 12;
   hours = hours ? hours : 12; // 0 should be 12
-  liveClockEl.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+  if (liveClockEl) liveClockEl.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
 }
 
 // ==========================================================================
@@ -488,7 +488,7 @@ function updateUI() {
   trackArtworkEl.src = current.thumb || `https://img.youtube.com/vi/${current.id}/mqdefault.jpg`;
   totalDurationEl.textContent = current.duration || '0:00';
 
-  queueBadgeEl.textContent = state.playlist.length;
+  if (queueBadgeEl) queueBadgeEl.textContent = state.playlist.length;
   drawerSongCountEl.textContent = `${state.playlist.length} tracks`;
 
   updatePlayStateUI();
@@ -751,7 +751,7 @@ class ParticleSystem {
   toggle() {
     this.isEnabled = !this.isEnabled;
     this.canvas.style.display = this.isEnabled ? 'block' : 'none';
-    toggleParticlesBtn.classList.toggle('active', this.isEnabled);
+    if (toggleParticlesBtn) toggleParticlesBtn.classList.toggle('active', this.isEnabled);
     showToast(this.isEnabled ? 'Festive sparkles enabled' : 'Festive sparkles hidden');
   }
 
@@ -827,9 +827,11 @@ function setupEventListeners() {
   });
 
   // Drawer
-  openPlaylistBtn.addEventListener('click', () => {
-    playlistDrawer.classList.add('open');
-  });
+  if (openPlaylistBtn) {
+    openPlaylistBtn.addEventListener('click', () => {
+      playlistDrawer.classList.add('open');
+    });
+  }
   closePlaylistBtn.addEventListener('click', () => {
     playlistDrawer.classList.remove('open');
   });
@@ -869,7 +871,7 @@ function setupEventListeners() {
   }
 
   // Add Modal
-  openAddModalBtn.addEventListener('click', openModal);
+  if (openAddModalBtn) openAddModalBtn.addEventListener('click', openModal);
   closeAddModalBtn.addEventListener('click', closeModal);
   cancelAddBtn.addEventListener('click', closeModal);
   addSongForm.addEventListener('submit', handleAddSong);
@@ -937,7 +939,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Canvas Particles
   const canvas = document.getElementById('festiveCanvas');
   const particleSystem = new ParticleSystem(canvas);
-  toggleParticlesBtn.addEventListener('click', () => particleSystem.toggle());
+  if (toggleParticlesBtn) toggleParticlesBtn.addEventListener('click', () => particleSystem.toggle());
 
   // Setup UI and Events
   updateUI();

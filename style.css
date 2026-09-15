@@ -56,10 +56,8 @@ html, body {
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  image-rendering: high-quality;
-  image-rendering: -webkit-optimize-contrast;
-  filter: saturate(1.04) contrast(1.02);
-  transition: transform 1.2s ease-out;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .hero-overlay {
@@ -143,6 +141,15 @@ html, body {
   width: 36px;
   height: 36px;
   justify-content: center;
+}
+
+.github-btn {
+  text-decoration: none;
+  color: var(--color-white);
+}
+
+.nav-spacer {
+  flex: 1;
 }
 
 .pill-btn:hover, .icon-btn:hover {
